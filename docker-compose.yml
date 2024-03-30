@@ -35,13 +35,26 @@ services:
         volumes:
             - .docker/redis/data:/data
         ports:
-            - "6379:6379"
+            - "6380:6379"
+
+    rabbitmq:
+        image: "rabbitmq:3-management"
+        hostname: "rabbitmq"
+        container_name: "laravel-rabbitmq"
+        environment:
+            RABBITMQ_DEFAULT_USER: "rabbitmq"
+            RABBITMQ_DEFAULT_PASS: "rabbitmq"
+            RABBITMQ_DEFAULT_VHOST: "/"
+        volumes:
+            - .docker/rabbitmq/data/:/var/lib/rabbitmq/
+            - .docker/rabbitmq/log/:/var/log/rabbitmq
+        ports:
+            - "15672:15672"
+            - "5672:5672"
 
     db:
         container_name: laravel-db
         image: postgres:16
-        #        ports:
-        #            - "5432:5432"
         volumes:
             - .docker/db/data:/var/lib/postgresql/data
             - .docker/db/sql:/docker-entrypoint-initdb.d
